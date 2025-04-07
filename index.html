@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Education Timeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+      background-size: 400% 400%;
+      animation: gradientBackground 15s ease infinite;
+      overflow-x: hidden;
+      color: #fff;
+      position: relative;
+    }
+
+    @keyframes gradientBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Professional background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(74, 222, 128, 0.05) 2%, transparent 2.5%),
+        radial-gradient(circle at 75% 75%, rgba(74, 222, 128, 0.05) 2%, transparent 2.5%);
+      background-size: 60px 60px;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      max-width: 900px;
+      margin: auto;
+      padding: 80px 20px;
+      z-index: 2;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    h2 {
+      font-size: 36px;
+      font-weight: 600;
+      color: #f8fafc;
+      letter-spacing: 0.5px;
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::before {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 3px;
+      background: #4ade80;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 1px;
+      background: rgba(74, 222, 128, 0.3);
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .tagline {
+      font-size: 16px;
+      color: #a0aec0;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .timeline {
+      position: relative;
+      padding-top: 20px;
+    }
+
+    /* Timeline line - positioned behind icons */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 40px;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: rgba(148, 163, 184, 0.2);
+      z-index: 1;
+    }
+
+    /* Timeline progress line - positioned behind icons */
+    .timeline-progress {
+      position: absolute;
+      left: 40px;
+      top: 0;
+      width: 2px;
+      height: 0;
+      background: linear-gradient(to bottom, 
+        #4ade80 0%,
+        #86efac 50%,
+        #bbf7d0 100%);
+      z-index: 1;
+      transition: height 0.3s ease;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+    }
+
+    .timeline-item {
+      display: flex;
+      position: relative;
+      margin-bottom: 50px;
+      padding-left: 80px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .timeline-item:hover .timeline-content {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .timeline-item:hover .icon {
+      transform: scale(1.2);
+      box-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
+    }
+
+    /* Icon positioned above the line with higher z-index */
+    .icon {
+      position: absolute;
+      left: 22px;
+      top: 10px;
+      background: linear-gradient(145deg, #4ade80, #22c55e);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1), 0 0 10px rgba(74, 222, 128, 0.4);
+      z-index: 5; /* Higher z-index to ensure it's above the line */
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Enhanced glassmorphism effect */
+    .timeline-content {
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 25px 30px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 2px 5px rgba(255, 255, 255, 0.05) inset;
+      transition: all 0.4s ease;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glass shine effect */
+    .timeline-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      animation: shine 8s infinite;
+      pointer-events: none;
+    }
+
+    /* Top glass highlight */
+    .timeline-content::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.3),
+        rgba(255, 255, 255, 0.1)
+      );
+    }
+
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+      20% {
+        left: 100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    .timeline-date {
+      font-size: 14px;
+      font-weight: 500;
+      color: #4ade80;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-block;
+      position: relative;
+    }
+
+    .timeline-date::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 30px;
+      height: 2px;
+      background: rgba(74, 222, 128, 0.3);
+    }
+
+    .timeline-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #f1f5f9;
+    }
+
+    .timeline-desc {
+      font-size: 15px;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .skill-tag {
+      background: rgba(74, 222, 128, 0.08);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      color: #a7f3d0;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(4px);
+    }
+
+    .skill-tag:hover {
+      background: rgba(74, 222, 128, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 30px;
+      }
+      
+      .tagline {
+        font-size: 15px;
+      }
+      
+      .timeline-content {
+        padding: 20px 25px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 60px 15px;
+      }
+      
+      .timeline::before,
+      .timeline-progress {
+        left: 20px;
+      }
+
+      .timeline-item {
+        padding-left: 60px;
+      }
+
+      .icon {
+        left: 2px;
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+      
+      .timeline-title {
+        font-size: 18px;
+      }
+      
+      .timeline-desc {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      h2 {
+        font-size: 26px;
+      }
+      
+      .tagline {
+        font-size: 14px;
+      }
+      
+      .timeline-content {
+        padding: 15px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Professional Journey</h2>
+      <div class="tagline">A comprehensive timeline showcasing educational milestones and academic achievements that have shaped my professional development</div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-progress"></div>
+      
+      <div class="timeline-item">
+        <div class="icon"><i class="fas fa-user-graduate"></i></div>
+        <div class="timeline-content">
+          <div class="timeline-date">2024 – 2026</div>
+          <div class="timeline-title">MSc Informatics (IT)</div>
+          <div class="timeline-desc">
+            Pursuing a Master's degree at the Institute of Informatics and Communication, University of Delhi South Campus, with a focus on core computing subjects including data structures, operating systems, computer networks, and cloud computing.          </div>
+          <div class="skills">
+            <span class="skill-tag">Data Structure & Algorithms</span>
+            <span class="skill-tag">Cloud Computing</span>
+            <span class="skill-tag">Machine Learning</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="icon"><i class="fas fa-graduation-cap"></i></div>
+        <div class="timeline-content">
+          <div class="timeline-date">2021 – 2024</div>
+          <div class="timeline-title">BSc General</div>
+          <div class="timeline-desc">
+            Completed undergraduate studies at Kumaun University, Uttarakhand with distinction. Developed a strong foundation in computational sciences and mathematics.          </div>
+          <div class="skills">
+            <span class="skill-tag">Programming</span>
+            <span class="skill-tag">Physics</span>
+            <span class="skill-tag">Mathematics</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="icon"><i class="fas fa-school"></i></div>
+        <div class="timeline-content">
+          <div class="timeline-date">2020 – 2021</div>
+          <div class="timeline-title">Intermediate</div>
+          <div class="timeline-desc">
+            Completed 12th in the Science stream from Kendriya Vidyalaya, Kausani, with core subjects including Mathematics, Physics, Chemistry, and Computer Science. Demonstrated strong analytical and problem-solving skills through academic projects and consistent academic performance.             
+          </div>
+          <div class="skills">
+            <span class="skill-tag">Physics</span>
+            <span class="skill-tag">Computer Science</span>
+            <span class="skill-tag">Mathematics</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="icon"><i class="fas fa-book-reader"></i></div>
+        <div class="timeline-content">
+          <div class="timeline-date">2018 – 2019</div>
+          <div class="timeline-title">High School</div>
+          <div class="timeline-desc">
+            Completed 10th grade at Kendriya Vidyalaya, Kausani with outstanding academic performance. Established a strong educational foundation while actively participating in extracurricular activities including debate competitions, sports, and cultural events.
+          </div>
+          <div class="skills">
+            <span class="skill-tag">Academics</span>
+            <span class="skill-tag">Public Speaking</span>
+            <span class="skill-tag">Teamwork</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const timeline = document.querySelector('.timeline');
+      const timelineProgress = document.querySelector('.timeline-progress');
+      const timelineItems = document.querySelectorAll('.timeline-item');
+      const timelineHeight = timeline.offsetHeight;
+      
+      // Calculate timeline progress based on scroll position
+      function updateTimelineProgress() {
+        const timelineTop = timeline.getBoundingClientRect().top;
+        const timelineBottom = timeline.getBoundingClientRect().bottom;
+        const windowHeight = window.innerHeight;
+        
+        // If timeline is in view
+        if (timelineTop < windowHeight && timelineBottom > 0) {
+          // Calculate how much of the timeline is visible
+          const visibleHeight = Math.min(windowHeight, timelineBottom) - Math.max(0, timelineTop);
+          const visiblePercentage = visibleHeight / timelineHeight;
+          
+          // Calculate scroll progress (how far down the timeline we've scrolled)
+          const scrollProgress = Math.max(0, Math.min(1, 1 - (timelineTop / (windowHeight - timelineHeight))));
+          
+          // Set the height of the progress line
+          timelineProgress.style.height = `${scrollProgress * 100}%`;
+        }
+      }
+      
+      // Animate timeline items when they come into view
+      const itemObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -100px 0px' });
+      
+      // Add delay between items
+      timelineItems.forEach((item, index) => {
+        item.style.transitionDelay = `${index * 0.2}s`;
+        itemObserver.observe(item);
+      });
+      
+      // Update timeline progress on scroll
+      window.addEventListener('scroll', updateTimelineProgress);
+      
+      // Initial update
+      updateTimelineProgress();
+    });
+  </script>
+</body>
+</html>
+
